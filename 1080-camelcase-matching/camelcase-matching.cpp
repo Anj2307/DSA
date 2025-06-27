@@ -35,22 +35,22 @@ public:
         node->flag = true;
     }
 
-    // Match query against pattern stored in Trie (case-sensitive logic)
+    
     bool search(const string& query) {
         Node* node = root;
-        int i = 0; // index for query
+        int i = 0; 
 
         while (i < query.size()) {
             char ch = query[i];
 
-            // Skip lowercase characters if not in Trie
+           
             if (islower(ch)) {
                 if (node->contains(ch)) {
                     node = node->get(ch);
                 }
                 i++;
             }
-            // Must match uppercase characters exactly
+           
             else {
                 if (!node->contains(ch))
                     return false;
@@ -59,7 +59,7 @@ public:
             }
         }
 
-        // If pattern not fully consumed, it's invalid
+        
         while (node && !node->flag && !node->map.empty()) {
            return false;
         }
