@@ -13,14 +13,14 @@ public:
             unordered_map<int, int> localDepth;
             int d = 0;
 
-            // Traverse the path starting from node
+            
             while (node != -1 && !visited[node]) {
                 visited[node] = true;
                 localDepth[node] = d++;
                 node = edges[node];
             }
 
-            // If we encounter a node in localDepth again, we found a cycle
+        
             if (node != -1 && localDepth.count(node)) {
                 maxCycle = max(maxCycle, d - localDepth[node]);
             }
