@@ -1,29 +1,33 @@
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-        int m = mat.size(), n = mat[0].size();
-        vector<vector<int>> dist(m, vector<int>(n, INT_MAX - 10000)); // prevent overflow
-
-        // Pass 1: Top-Left to Bottom-Right
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j) {
-                if (mat[i][j] == 0) {
-                    dist[i][j] = 0;
-                } else {
-                    if (i > 0) dist[i][j] = min(dist[i][j], dist[i - 1][j] + 1);
-                    if (j > 0) dist[i][j] = min(dist[i][j], dist[i][j - 1] + 1);
+        int n = mat.size();
+        int m = mat[0].size();
+        vector<vector<int>> ans(n,vector<int>(m,-1));
+        queue<pair<int,int>> pq;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(mat[i][j]==0){
+                    ans[i][j]=0;
+                    pq.push({i,j});
                 }
             }
         }
-
-        // Pass 2: Bottom-Right to Top-Left
-        for (int i = m - 1; i >= 0; --i) {
-            for (int j = n - 1; j >= 0; --j) {
-                if (i < m - 1) dist[i][j] = min(dist[i][j], dist[i + 1][j] + 1);
-                if (j < n - 1) dist[i][j] = min(dist[i][j], dist[i][j + 1] + 1);
+        vector<int> dirx = {1,0,-1,0};
+        vector<int> diry = {0,1,0,-1};
+        while(!pq.empty()){
+            int i = pq.front().first;
+            int j = pq.front().second;
+            pq.pop();
+            for(int d=0;d<4;d++){
+                int x = i+dirx[d];
+                int y = j+diry[d];
+                if(x>=0 &&x<n && y>=0 && y<m && ans[x][y]==-1){
+                    ans[x][y] = 1+ans[i][j];
+                    pq.push({x,y});
+                }
             }
         }
-
-        return dist;
+        return ans;
     }
 };
