@@ -2,28 +2,25 @@ class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
         int m = mat.size(), n = mat[0].size();
-        vector<vector<int>> dist(m, vector<int>(n, INT_MAX));
-        queue<pair<int, int>> q;
+        vector<vector<int>> dist(m, vector<int>(n, INT_MAX - 10000)); // prevent overflow
 
+        // Pass 1: Top-Left to Bottom-Right
         for (int i = 0; i < m; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (mat[i][j] == 0) {
                     dist[i][j] = 0;
-                    q.push({i, j});
+                } else {
+                    if (i > 0) dist[i][j] = min(dist[i][j], dist[i - 1][j] + 1);
+                    if (j > 0) dist[i][j] = min(dist[i][j], dist[i][j - 1] + 1);
                 }
             }
         }
 
-        
-        vector<pair<int, int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-        while (!q.empty()) {
-            auto [i, j] = q.front(); q.pop();
-            for (auto [di, dj] : directions) {
-                int ni = i + di, nj = j + dj;
-                if (ni >= 0 && ni < m && nj >= 0 && nj < n && dist[ni][nj] > dist[i][j] + 1) {
-                    dist[ni][nj] = dist[i][j] + 1;
-                    q.push({ni, nj});
-                }
+        // Pass 2: Bottom-Right to Top-Left
+        for (int i = m - 1; i >= 0; --i) {
+            for (int j = n - 1; j >= 0; --j) {
+                if (i < m - 1) dist[i][j] = min(dist[i][j], dist[i + 1][j] + 1);
+                if (j < n - 1) dist[i][j] = min(dist[i][j], dist[i][j + 1] + 1);
             }
         }
 
