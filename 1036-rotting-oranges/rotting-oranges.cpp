@@ -1,56 +1,61 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int count=0;
-        queue<pair<int,int>>q;
+        queue<pair<pair<int,int>,int>>q;
+        int e=0;
         for(int i=0;i<grid.size();i++)
         {
-            for(int j=0;j<grid[i].size();j++)
+            for (int j=0;j<grid[0].size();j++)
             {
-                if(grid[i][j]==2) q.push({i,j});
+                if(grid[i][j]==2)
+                {
+                    q.push({{i,j},0});
+                    
+                }
+                else if(grid[i][j]==1)
+                e++;
             }
         }
+        int c=0;
 
-       // if(q.empty()) return -1;
-        //vector<vector<bool>>vis(grid.size(),vector<bool>(grid[0].size(),false));
-        while(!q.empty())
-        {
-            int s=q.size();
-            for(int i=0;i<s;i++)
+        while(!q.empty()){
+            auto p=q.front();
+            auto g=p.first;
+            q.pop();
+            c=p.second;
+            
+            if(g.first>0&&grid[g.first-1][g.second]==1)
             {
-                pair<int,int>test=q.front();q.pop();
-                if(test.first>0 && grid[test.first-1][test.second]==1)
-                {
-                    q.push({test.first-1,test.second});
-                    grid[test.first-1][test.second]=2;
-                }
-                if(test.first<(grid.size()-1) && grid[test.first+1][test.second]==1)
-                {
-                    q.push({test.first+1,test.second});
-                    grid[test.first+1][test.second]=2;
-                }
-                if(test.second>0 && grid[test.first][test.second-1]==1)
-                {
-                    q.push({test.first,test.second-1});
-                    grid[test.first][test.second-1]=2;
-                }
-                if(test.second<(grid[0].size()-1) && grid[test.first][test.second+1]==1)
-                {
-                    q.push({test.first,test.second+1});
-                    grid[test.first][test.second+1]=2;
-                }
+                grid[g.first-1][g.second]=2;
+                q.push({{g.first-1,g.second},p.second+1});
+                e--;
+            }
+            if(g.first<grid.size()-1&&grid[g.first+1][g.second]==1)
+            {
+                grid[g.first+1][g.second]=2;
+                q.push({{g.first+1,g.second},p.second+1});
+                e--;
+            }
 
-            }
-            count++;
-        }
-        for(int i=0;i<grid.size();i++)
-        {
-            for(int j=0;j<grid[0].size();j++)
+            if(g.second>0&&grid[g.first][g.second-1]==1)
             {
-                if(grid[i][j]==1) return -1;
+                grid[g.first][g.second-1]=2;
+                q.push({{g.first,g.second-1},p.second+1});
+                e--;
+            }
+
+            if(g.second<grid[0].size()-1&&grid[g.first][g.second+1]==1)
+            {
+                grid[g.first][g.second+1]=2;
+                q.push({{g.first,g.second+1},p.second+1});
+                e--;
             }
         }
-        if(count==0) return 0;
-        return count-1;
+        
+       
+        if(!e) return c;
+        return -1;
+        
+
     }
 };
