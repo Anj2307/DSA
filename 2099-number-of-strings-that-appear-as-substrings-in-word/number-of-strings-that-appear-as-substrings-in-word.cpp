@@ -1,6 +1,6 @@
 class Solution {
 private:
-    bool check(string& str, string word){
+    bool check(string& str, string& word){
         if(str.length()>word.length()) return false;
         if(word.find(str)!=-1) return true;
         else return false;
