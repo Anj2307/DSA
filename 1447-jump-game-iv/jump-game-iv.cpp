@@ -2,7 +2,7 @@ class Solution {
 public:
     int minJumps(vector<int>& arr) {
         int n = arr.size();
-        if (n <= 1) return 0; // Handle edge cases early
+        if (n <= 1) return 0;
 
         unordered_map<int, vector<int>> map;
         for (int i = 0; i < n; i++) {
@@ -13,7 +13,7 @@ public:
         q.push({0, 0});
 
         vector<bool> vec(n, false);
-        vec[0] = true; // Mark source as visited immediately
+        vec[0] = true; 
 
         while (!q.empty()) {
             auto u = q.front();
@@ -24,19 +24,19 @@ public:
 
             if (idx == n - 1) return steps;
 
-            // 1. Move Forward (idx + 1)
+            
             if (idx + 1 < n && !vec[idx + 1]) {
                 vec[idx + 1] = true;
                 q.push({idx + 1, steps + 1});
             }
 
-            // 2. Move Backward (idx - 1)
+            
             if (idx - 0 > 0 && !vec[idx - 1]) {
                 vec[idx - 1] = true;
                 q.push({idx - 1, steps + 1});
             }
 
-            // 3. Jump to identical values
+            
             if (map.find(arr[idx]) != map.end()) {
                 for (auto it : map[arr[idx]]) {
                     if (!vec[it]) {
@@ -44,7 +44,7 @@ public:
                         q.push({it, steps + 1});
                     }
                 }
-                // CRITICAL: Clear the map entry to prevent processing it again
+                
                 map.erase(arr[idx]);
             }
         }
