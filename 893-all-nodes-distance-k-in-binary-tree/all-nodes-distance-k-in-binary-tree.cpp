@@ -19,8 +19,7 @@ public:
         return ;
     }
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
-        ios::sync_with_stdio(false);
-        cin.tie(nullptr);
+       
         unordered_map<int,TreeNode*>map;
         dfs(root,nullptr,map);
         int level = 0;
