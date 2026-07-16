@@ -15,7 +15,7 @@ class Solution {
 private:
     TreeNode* tar = nullptr;
     
-    std::unordered_map<TreeNode*, TreeNode*> parentf(TreeNode* root, int start){
+    unordered_map<TreeNode*, TreeNode*> parentf(TreeNode* root, int start){
         unordered_map<TreeNode*, TreeNode*> parent;
         queue<TreeNode*> q;
         q.push(root);
