@@ -1,37 +1,48 @@
 class Solution {
 public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<vector<pair<int, int>>> adj(n);
-        for (auto it : flights) {
-            adj[it[0]].push_back({it[1], it[2]});
-        }
+    int findCheapestPrice(int n, vector<vector<int>>& flights,
+                          int src, int dst, int k) {
 
-        queue<pair<int, pair<int, int>>> q;
-        q.push({0, {src, 0}});
+        vector<vector<pair<int,int>>> adj(n);
 
-        vector<int> dist(n, 1e9);
-        dist[src] = 0;
+        for(auto &e : flights)
+            adj[e[0]].push_back({e[1], e[2]});
 
-        while (!q.empty()) {
-            auto it = q.front();
-            q.pop();
-            int stops = it.first;
-            int node = it.second.first;
-            int cost = it.second.second;
+        priority_queue<
+            vector<int>,
+            vector<vector<int>>,
+            greater<vector<int>>
+        > pq;
 
-            if (stops > k) continue;
+        vector<vector<int>> dist(k + 2, vector<int>(n, INT_MAX));
 
-            for (auto neighbor : adj[node]) {
-                int adjNode = neighbor.first;
-                int edgeWeight = neighbor.second;
+        dist[0][src] = 0;
+        pq.push({0, src, 0});      
 
-                if (cost + edgeWeight < dist[adjNode]) {
-                    dist[adjNode] = cost + edgeWeight;
-                    q.push({stops + 1, {adjNode, cost + edgeWeight}});
+        while(!pq.empty()){
+
+            auto cur = pq.top();
+            pq.pop();
+
+            int cost = cur[0];
+            int u = cur[1];
+            int edges = cur[2];
+
+            if(u == dst)
+                return cost;
+
+            if(edges == k + 1)
+                continue;
+
+            for(auto &[v, wt] : adj[u]){
+
+                if(cost + wt < dist[edges + 1][v]){
+                    dist[edges + 1][v] = cost + wt;
+                    pq.push({cost + wt, v, edges + 1});
                 }
             }
         }
 
-        return (dist[dst] == 1e9) ? -1 : dist[dst];
+        return -1;
     }
 };
