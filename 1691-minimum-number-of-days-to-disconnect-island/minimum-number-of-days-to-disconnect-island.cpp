@@ -34,23 +34,23 @@ private:
 
 public:
     int minDays(vector<vector<int>>& grid) {
-        // Step 1: Already disconnected?
+        
         if (countIslands(grid) != 1) return 0;
         
         int m = grid.size(), n = grid[0].size();
         
-        // Step 2: Can we disconnect with 1 removal?
+    
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1) {
                     grid[i][j] = 0;
                     if (countIslands(grid) != 1) return 1;
-                    grid[i][j] = 1; // Backtrack
+                    grid[i][j] = 1;
                 }
             }
         }
         
-        // Step 3: Base case fallback
+        
         return 2;
     }
 };
