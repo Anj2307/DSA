@@ -20,7 +20,7 @@ public:
             p.pop(); 
 
             if(flag){ 
-                // 'a' is our separator character because 'prev' is still waiting
+                
                 result+=(a+'a'); 
                 freq[a]--; 
 
