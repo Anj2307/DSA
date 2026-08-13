@@ -1,69 +1,53 @@
-#include <unordered_map>
-#include <queue>
-#include <vector>
-
 class LRUCache {
 private:
     int cap;
-    long long timestamp; 
-    
-    // Maps: key -> pair<value, timestamp_when_last_used>
-    std::unordered_map<int, std::pair<int, long long>> cache;
-    
-    // Min-heap: stores pair<timestamp, key> to easily find the oldest item
-    std::priority_queue<std::pair<long long, int>, 
-                        std::vector<std::pair<long long, int>>, 
-                        std::greater<std::pair<long long, int>>> min_heap;
-
+    long long timestamp;
+    typedef pair<long long, int>c;
+    unordered_map<int, c> cache;
+    priority_queue<c,vector<c>,greater<c>> m_h;
 public:
     LRUCache(int capacity) {
-        cap = capacity;
-        timestamp = 0;
+        cap=capacity;
+        timestamp=0;
     }
     
     int get(int key) {
-        if (cache.find(key) == cache.end()) {
-            return -1;
-        }
-        
-        // Increment timestamp and update the key's last used time
+        if(!cache.count(key)) return -1;
         timestamp++;
-        cache[key].second = timestamp;
-        
-        // Push the new timestamp state to the heap
-        min_heap.push({timestamp, key});
-        
-        return cache[key].first;
+        cache[key].first=timestamp;
+        m_h.push({timestamp,key});
+        return cache[key].second;
     }
     
     void put(int key, int value) {
         timestamp++;
-        
-        // Case 1: Key already exists, just update value and timestamp
-        if (cache.find(key) != cache.end()) { 
-            cache[key] = {value, timestamp};
-            min_heap.push({timestamp, key});
+       if(cache.count(key)){
+            cache[key]={timestamp,value};
+            m_h.push({timestamp,key});
             return;
-        }
-        
-        // Case 2: Cache is full, perform lazy eviction
-        if (cache.size() == cap) {
-            while (!min_heap.empty()) {
-                std::pair<long long, int> top_element = min_heap.top();
-                long long time = top_element.first;
-                int k = top_element.second;
-                min_heap.pop();
-                
-                // Evict only if this timestamp matches the current valid timestamp in the map
-                if (cache.find(k) != cache.end() && cache[k].second == time) {
+       } 
+       if(cache.size()==cap){
+            while(!m_h.empty()){
+                c top=m_h.top();
+                long long time=top.first;
+                int k=top.second;
+                m_h.pop();
+
+                if(cache.count(k) && cache[k].first==time){
                     cache.erase(k);
                     break;
                 }
             }
-        }
-        
-        // Insert the new key-value pair
-        cache[key] = {value, timestamp};
-        min_heap.push({timestamp, key});
+       }
+       cache[key]={timestamp,value};
+       m_h.push({timestamp,key});
+
     }
 };
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
