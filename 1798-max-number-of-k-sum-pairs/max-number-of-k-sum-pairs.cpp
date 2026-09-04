@@ -1,22 +1,21 @@
 class Solution {
 public:
-    int maxOperations(vector<int>& nums, int target) {
+    int maxOperations(vector<int>& nums, int k) {
+        sort(nums.begin(),nums.end());
         int l=0;
         int r=nums.size()-1;
-        int ans=0;
-        sort(nums.begin(),nums.end());
+        int j=0;
         while(l<r){
-            if(nums[l]+nums[r]==target)
+            if(nums[l]+nums[r]==k)
                 {
-                    ans++;
                     l++;
                     r--;
+                    j++;
                 }
-
-            else if(nums[l]+nums[r]>target)
+            else if(nums[l]+nums[r]>k){
                 r--;
-            else l++;
+            }else l++;
         }
-        return ans;
+        return j;
     }
 };
