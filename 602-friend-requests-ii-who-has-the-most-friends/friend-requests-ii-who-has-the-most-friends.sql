@@ -1,5 +1,5 @@
 
-SELECT id, COUNT(*) AS num
+SELECT id, count(*) as num
 FROM (
     SELECT requester_id AS id
     FROM RequestAccepted
@@ -9,6 +9,6 @@ FROM (
     SELECT accepter_id AS id
     FROM RequestAccepted
 ) AS friends
-GROUP BY id
-ORDER BY num DESC
-LIMIT 1;
+group by id
+order by num desc
+limit 1 offset 0;
