@@ -7,7 +7,8 @@ class Solution:
             return []
             
         # Fix 2: Wrap the tuple in a list [] so it initializes correctly
-        q = deque([(root, 0)])
+        q = deque()
+        q.append((root,0))
         l = list()
         
         while q:
